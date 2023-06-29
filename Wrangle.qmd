@@ -89,6 +89,52 @@ traps_subset <- lobster_traps %>%
 
 ## Exercise 4 
 
+For each data frame, calculate the total count and total traps by site and year (i.e. total traps for every combination of site and year). Store these summary statistics in separate data frames.
+
+HINT: use group_by() and summarize().
+
+Do you notice anything not right in the outcome data frame? We’ll get to it in exercise 7.
+
+
+```{r}
+total_abundance <- lobster_abundance %>% 
+    group_by(SITE, YEAR) %>% 
+    summarize(total_lobsters = sum(COUNT, na.rm = T))
+
+
+total_traps <- traps_subset %>% 
+    group_by(SITE, YEAR) %>% 
+    summarize(total_traps = sum(TRAPS, na.rm = T))
+```
+
+
 ## Exercise 5 
+
+Use one of the join_ functions to get an output data frame with the following columns: SITE, YEAR, total_lobsters, total_traps.
+
+Discuss with your neighbor how the output data frame varies when you do a left_join() or a full_join(). What happens when you do an inner_join()?
+
+```{r}
+
+colnames(total_abundance)
+colnames(total_traps)
+
+ljoin <- left_join(total_abundance,total_traps, by = c("SITE", "YEAR"))
+head(ljoin)
+```
+
+```{r}
+
+colnames(total_abundance)
+colnames(total_traps)
+
+fjoin <- full_join(total_abundance,total_traps, by = c("SITE", "YEAR"))
+head(fjoin)
+```
+```{r}
+library(arsenal)
+comparedf(ljoin,fjoin)
+```
+
 
 ## Exercise 6 
