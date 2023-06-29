@@ -121,6 +121,8 @@ colnames(total_traps)
 
 ljoin <- left_join(total_abundance,total_traps, by = c("SITE", "YEAR"))
 head(ljoin)
+nrow(ljoin)
+dim(ljoin)
 ```
 
 ```{r}
@@ -130,11 +132,27 @@ colnames(total_traps)
 
 fjoin <- full_join(total_abundance,total_traps, by = c("SITE", "YEAR"))
 head(fjoin)
+nrow(fjoin) 
+abundance_traps <- fjoin
 ```
 ```{r}
 library(arsenal)
 comparedf(ljoin,fjoin)
+
+identical(ljoin,fjoin)
 ```
 
 
 ## Exercise 6 
+
+The sites IVEE and NAPL are marine protected areas (MPAs). Read the documentation about the case_when() function and use it to add this designation to your data set.
+
+HINT: Notice you will have to create a new column with the MPA designation. What function have you previously used to create new columns?
+
+```{r}
+lobster_mpa <- abundance_traps %>% 
+    mutate(DESIGNATION = case_when(
+    SITE %in% c("IVEE", "NAPL") ~ "MPA",
+    SITE %in% c("AQUE", "CARP", "MOHK") ~ "not MPA"))
+```
+
